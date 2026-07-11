@@ -6,7 +6,7 @@ import asyncio
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = SiamseNetwork().to(device)
-model.load_state_dict(torch.load("models/siamese_resnet18.pth", map_location=device))
+model.load_state_dict(torch.load("models/siamese_resnet18_v2.pth", map_location=device))
 model.eval()
 
 def load_image(image: Image.Image):
