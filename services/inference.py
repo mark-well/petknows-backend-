@@ -4,10 +4,26 @@ from PIL import Image
 from datasets.data_transformer import test_transform
 import asyncio
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = SiamseNetwork().to(device)
-model.load_state_dict(torch.load("models/siamese_resnet18_v2.pth", map_location=device))
-model.eval()
+device = torch.device("cpu")
+# model = SiamseNetwork().to(device)
+# model.load_state_dict(torch.load("models/siamese_resnet18_v2.pth", map_location=device))
+# model.eval()
+
+model = None
+def get_model():
+    global model
+
+    if model is None:
+        model = SiamseNetwork().to(device)
+        model.load_state_dict(
+            torch.load(
+                "models/siamese_resnet18_v2.pth",
+                map_location=device
+            )
+        )
+        model.eval()
+
+    return model
 
 def load_image(image: Image.Image):
     image = image.convert("RGB")
@@ -17,6 +33,7 @@ def load_image(image: Image.Image):
     return image
 
 def get_embedding(image):
+    model = get_model()
     img = load_image(image)
     with torch.no_grad():
         embedding = model.get_embedding(img.to(device))
