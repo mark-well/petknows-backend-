@@ -1,3 +1,5 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 fastapi[standard]
 uvicorn==0.51.0
 torch==2.13.0
